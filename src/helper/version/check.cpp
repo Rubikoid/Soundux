@@ -8,6 +8,9 @@ httplib::Client VersionCheck::client("https://api.github.com");
 
 std::optional<Soundux::Objects::VersionStatus> VersionCheck::getStatus()
 {
+    Fancy::fancy.logTime().warning() << "Request DISABLED!" << std::endl;
+    return std::nullopt;
+
     auto githubTags = client.Get("/repos/Soundux/Soundux/tags");
 
     if (githubTags && githubTags->status == 200)
