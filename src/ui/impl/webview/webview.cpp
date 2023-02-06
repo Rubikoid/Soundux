@@ -26,8 +26,8 @@ namespace Soundux::Objects
         webview =
             std::make_shared<Webview::Window>("Soundux", Soundux::Globals::gData.width, Soundux::Globals::gData.height);
         webview->setTitle("Soundux");
-        webview->enableDevTools(std::getenv("SOUNDUX_DEBUG") != nullptr);    // NOLINT
-        webview->enableContextMenu(std::getenv("SOUNDUX_DEBUG") != nullptr); // NOLINT
+        webview->enableDevTools(std::getenv("SOUNDUX_DEBUG") != nullptr || 1);    // NOLINT
+        webview->enableContextMenu(std::getenv("SOUNDUX_DEBUG") != nullptr || 1); // NOLINT
 
 #ifdef _WIN32
         char rawPath[MAX_PATH];

@@ -37,7 +37,7 @@ int main(int argc, char **arguments)
 #endif
 
 #if defined(_WIN32)
-    if (std::getenv("SOUNDUX_DEBUG")) // NOLINT
+    if (std::getenv("SOUNDUX_DEBUG") || 1) // NOLINT
     {
         AllocConsole();
         freopen_s(reinterpret_cast<FILE **>(stdin), "CONIN$", "r", stdin);
@@ -50,7 +50,7 @@ int main(int argc, char **arguments)
         SetConsoleMode(hStdout, lMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN);
     }
 #endif
-    if (std::getenv("SOUNDUX_DEBUG") != nullptr) // NOLINT
+    if (std::getenv("SOUNDUX_DEBUG") != nullptr || 1) // NOLINT
     {
         Fancy::fancy.logTime().success() << "Enabling debug features" << std::endl;
     }
