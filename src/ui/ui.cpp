@@ -7,11 +7,28 @@
 #include <helper/audio/linux/pipewire/pipewire.hpp>
 #include <helper/audio/linux/pulseaudio/pulseaudio.hpp>
 #include <helper/misc/misc.hpp>
+#include <iterator>
 #include <nfd.hpp>
 #include <optional>
+#include <random>
 
 namespace Soundux::Objects
 {
+
+    template <typename Iter, typename RandomGenerator> Iter select_randomly(Iter start, Iter end, RandomGenerator &g)
+    {
+        std::uniform_int_distribution<> dis(0, std::distance(start, end) - 1);
+        std::advance(start, dis(g));
+        return start;
+    }
+
+    template <typename Iter> Iter select_randomly(Iter start, Iter end)
+    {
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        return select_randomly(start, end, gen);
+    }
+
     void Window::setup()
     {
         NFD::Init();
@@ -469,6 +486,43 @@ namespace Soundux::Objects
         onError(Enums::ErrorCode::FailedToRepeat);
         return std::nullopt;
     }
+
+    std::optional<PlayingSound> Window::playRandomSound()
+    {
+        uint32_t sound_id = 0;
+        {
+            auto scoped_sounds = Globals::gSounds.scoped();
+            auto sound = *select_randomly(scoped_sounds->begin(), scoped_sounds->end());
+            // auto sound = Globals::gData.getSound(sound_id);
+
+            Fancy::fancy.logTime().success()
+                << "playRandomSound: selected: id=" << sound.first << " name=" << sound.second.get().name << std::endl;
+            sound_id = sound.first;
+        }
+
+        return playSound(sound_id);
+    }
+
+    std::optional<PlayingSound> Window::playRandomSoundOnTab(const std::uint32_t &id)
+    {
+        uint32_t sound_id = 0;
+        {
+            auto raw_tab = Globals::gData.getTab(id);
+            if (raw_tab)
+            {
+                auto tab = *raw_tab;
+                auto sound = *select_randomly(tab.sounds.begin(), tab.sounds.end());
+                // auto sound = Globals::gData.getSound(sound_id);
+
+                Fancy::fancy.logTime().success()
+                    << "playRandomSoundOnTab: selected: id=" << sound.id << " name=" << sound.name << std::endl;
+                sound_id = sound.id;
+            }
+        }
+
+        return playSound(sound_id);
+    }
+
     std::vector<Tab> Window::removeTab(const std::uint32_t &id)
     {
         Globals::gData.removeTabById(id);

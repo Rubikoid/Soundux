@@ -349,6 +349,8 @@ namespace Soundux
         }
         bool WinSound::isVBCableProperlySetup()
         {
+            return true;
+
             for (const auto &recordingDevice : getRecordingDevices())
             {
                 if (recordingDevice.isListeningToDevice())

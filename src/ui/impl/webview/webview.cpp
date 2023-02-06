@@ -91,6 +91,8 @@ namespace Soundux::Objects
         webview->expose(Webview::Function("addTab", [this]() { return (addTab()); }));
         webview->expose(Webview::Function("getTabs", []() { return Globals::gData.getTabs(); }));
         webview->expose(Webview::Function("playSound", [this](std::uint32_t id) { return playSound(id); }));
+        webview->expose(Webview::Function("playRandomSound", [this]() { return playRandomSound(); }));
+        webview->expose(Webview::Function("playRandomSoundOnTab", [this](std::uint32_t id) { return playRandomSoundOnTab(id); }));
         webview->expose(Webview::Function("stopSound", [this](std::uint32_t id) { return stopSound(id); }));
         webview->expose(Webview::Function(
             "seekSound", [this](std::uint32_t id, std::uint64_t seekTo) { return seekSound(id, seekTo); }));

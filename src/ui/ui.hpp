@@ -92,6 +92,10 @@ namespace Soundux
             virtual std::optional<Sound> setCustomLocalVolume(const std::uint32_t &, const std::optional<int> &);
             virtual std::optional<Sound> setCustomRemoteVolume(const std::uint32_t &, const std::optional<int> &);
 
+          protected:
+            virtual std::optional<PlayingSound> playRandomSound();
+            virtual std::optional<PlayingSound> playRandomSoundOnTab(const std::uint32_t &);
+
           public:
             virtual ~Window();
             virtual void setup();
